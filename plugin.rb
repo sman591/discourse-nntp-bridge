@@ -3,6 +3,12 @@
 # version: 0.0.1
 # authors: Stuart Olivera
 
+gem 'active_attr', '0.9.0'
+gem 'thoughtafter-nntp', '1.0.0.3', require: false
+gem 'rfc2047', '0.3', github: 'ConradIrwin/rfc2047-ruby'
+
+require 'nntp'
+
 NEWSGROUPS = ''
 ENV['NEWS_HOST'] = ''
 ENV['NEWS_USERNAME'] = ''
