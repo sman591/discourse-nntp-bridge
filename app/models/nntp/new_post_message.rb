@@ -26,8 +26,7 @@ module NNTP
       if parent.present?
         # Mail gem does not automatically wrap Message-IDs in brackets
         mail.references = [
-          parent_message.references,
-          parent_message.message_id
+          parent_message
         ].flatten.compact.map{ |message_id| "<#{message_id}>" }
       end
 
@@ -48,12 +47,12 @@ module NNTP
 
     def parent_message
       @parent_message ||= if parent.present?
-        Mail.new(parent.headers)
+        parent_id
       end
     end
 
     def parent
-      @parent ||= Post.find_by(id: parent_id)
+      @parent ||= parent_id
     end
 
     def followup_newsgroup_must_exist
