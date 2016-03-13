@@ -1,0 +1,10 @@
+en:
+  js:
+    admin:
+      logs:
+        staff_actions:
+          actions:
+            confirmed_ham: "confirmed not spam"
+            confirmed_spam: "confirmed spam"
+            confirmed_spam_deleted: "confirmed spam and deleted user"
+            dismissed: 'dismissed spam'

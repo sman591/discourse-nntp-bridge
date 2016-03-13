@@ -1,0 +1,10 @@
+{{#if currentUser.staff}}
+  <li>
+    {{#link-to 'adminPlugins.nntpBridge'}}
+      {{i18n "nntpBridge.title"}}
+      {{#if currentUser.akismet_review_count}}
+        <span class='badge-notification flagged-posts'>{{currentUser.akismet_review_count}}</span>
+      {{/if}}
+    {{/link-to}}
+  </li>
+{{/if}}

@@ -74,3 +74,9 @@ def create(post)
   puts "\n/NNTP **********************\n\n\n\n\n\n\n\n\n"
 
 end
+
+add_admin_route 'nntp_bridge.title', 'nntpBridge'
+
+Discourse::Application.routes.append do
+  mount ::DiscourseNntpBridge::Engine, at: '/admin/plugins/nntp-bridge'
+end
