@@ -1,0 +1,4 @@
+en:
+  site_settings:
+    nntp_bridge_enabled: "Enable the NNTP bridge plugin"
+    nntp_bridge_default_newsgroup: "Default NNTP newsgroup"

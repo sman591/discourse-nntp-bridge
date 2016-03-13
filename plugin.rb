@@ -4,13 +4,14 @@
 # authors: Stuart Olivera
 # url: https://github.com/sman591/discourse-nntp-bridge
 
+enabled_site_setting :nntp_bridge_enabled
+
 gem 'active_attr', '0.9.0'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
 gem 'rfc2047', '0.3', github: 'ConradIrwin/rfc2047-ruby'
 
 require 'nntp'
 
-NEWSGROUPS = ''
 ENV['NEWS_HOST'] = ''
 ENV['NEWS_USERNAME'] = ''
 ENV['NEWS_PASSWORD'] = ''
@@ -42,6 +43,8 @@ after_initialize do
 end
 
 def create(post)
+  return unless SiteSetting.nntp_bridge_enabled?
+
   require './plugins/discourse-nntp-bridge/app/models/nntp/basic_message'
   require './plugins/discourse-nntp-bridge/app/models/nntp/flowed_format'
   require './plugins/discourse-nntp-bridge/app/models/nntp/new_post_message'
@@ -58,7 +61,7 @@ def create(post)
   new_post_params = {
     body: post.raw,
     parent_id: parent_id,
-    newsgroup_ids: NEWSGROUPS,
+    newsgroup_ids: SiteSetting.nntp_bridge_default_newsgroup,
     subject: title,
     user: post.user,
   }

@@ -1,0 +1,7 @@
+plugins:
+  nntp_bridge_enabled:
+    default: true
+    client: true
+  nntp_bridge_default_newsgroup:
+    default: "general"
+    client: true
