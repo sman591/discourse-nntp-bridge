@@ -55,10 +55,13 @@ def create(post)
     title = "Re: " + post.topic.title
     parent_id = DiscourseNntpBridge::NntpPost.where(post_id: post.topic.first_post.id).first.message_id
   end
+
+  newsgroup_ids = post.topic.category.custom_fields["nntp_bridge_newsgroup"] || SiteSetting.nntp_bridge_default_newsgroup
+
   new_post_params = {
     body: post.raw,
     parent_id: parent_id,
-    newsgroup_ids: SiteSetting.nntp_bridge_default_newsgroup,
+    newsgroup_ids: newsgroup_ids,
     subject: title,
     user: post.user,
   }
