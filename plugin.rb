@@ -2,6 +2,7 @@
 # about: Discourse plugin to keep NNTP & Discourse in sync
 # version: 0.0.1
 # authors: Stuart Olivera
+# url: https://github.com/sman591/discourse-nntp-bridge
 
 gem 'active_attr', '0.9.0'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
