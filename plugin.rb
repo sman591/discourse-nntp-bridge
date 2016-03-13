@@ -6,26 +6,23 @@
 
 enabled_site_setting :nntp_bridge_enabled
 
+
+# install dependencies
 gem 'active_attr', '0.9.0'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
 gem 'rfc2047', '0.3', github: 'ConradIrwin/rfc2047-ruby'
 
 require 'nntp'
 
+# load the engine
+load File.expand_path('../lib/discourse_nntp_bridge.rb', __FILE__)
+load File.expand_path('../lib/discourse_nntp_bridge/engine.rb', __FILE__)
+
 ENV['NEWS_HOST'] = ''
 ENV['NEWS_USERNAME'] = ''
 ENV['NEWS_PASSWORD'] = ''
 
-PLUGIN_NAME ||= "discourse_nntp_bridge".freeze
-
 after_initialize do
-
-  module ::DiscourseNntpBridge
-    class Engine < ::Rails::Engine
-      engine_name PLUGIN_NAME
-      isolate_namespace DiscourseNntpBridge
-    end
-  end
 
   class DiscourseNntpBridge::NntpPost < ActiveRecord::Base
     belongs_to :post
