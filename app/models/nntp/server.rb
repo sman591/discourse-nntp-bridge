@@ -25,7 +25,7 @@ module NNTP
       nntp.post(message)[1][/<(.*?)>/, 1] # Errors should be handled by caller
     end
 
-    private
+    # private
 
     def newsgroup_descriptions
       @newsgroup_descriptions ||=
