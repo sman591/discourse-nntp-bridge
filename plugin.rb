@@ -31,7 +31,7 @@ after_initialize do
   end
 
   Post.class_eval do
-    has_many :nntp_posts, class_name: 'DiscourseNntpBridge::NntpPost'
+    has_many :nntp_posts, class_name: 'DiscourseNntpBridge::NntpPost', dependent: :destroy
   end
 
   on(:post_created) do |post|
