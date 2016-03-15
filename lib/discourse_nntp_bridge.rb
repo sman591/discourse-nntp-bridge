@@ -128,12 +128,15 @@ module DiscourseNntpBridge
     if topic_id.blank?
       old_subject = subject
       # todo: probably better to do this in a begin/rescue as this only happens to a select number of posts
-      if !TextSentinel.title_sentinel(subject).valid? && SiteSetting.nntp_bridge_override_title_validations?
-        subject = "Temporary subject for complexity reasons"
-        # todo: this could error if the site doesn't allow duplicate titles
-      else
-        puts if $rails_rake_task
-        puts "Invalid subject from message #{message_id}, skipping" if $rails_rake_task
+      unless TextSentinel.title_sentinel(subject).valid?
+        puts SiteSetting.nntp_bridge_override_title_validations?
+        if SiteSetting.nntp_bridge_override_title_validations?
+          subject = "Temporary subject for complexity reasons"
+          # todo: this could error if the site doesn't allow duplicate titles
+        else
+          puts if $rails_rake_task
+          puts "Invalid subject from message #{message_id}, skipping" if $rails_rake_task
+        end
       end
       topic_id = Topic.create!(
                   title: subject,
