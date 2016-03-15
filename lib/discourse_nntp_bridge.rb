@@ -65,7 +65,8 @@ module DiscourseNntpBridge
 
     body = flowed_decode(body) if headers[/^Content-Type:.*format="?flowed"?/i]
     body.rstrip!
-
+    body = body[/.*Xref: [ \w\.:\d]+$?(.*)/m, 1] || body
+    body = "(empty body from NNTP)" if body.blank?
 
     date = Time.parse(
       headers[/^Injection-Date: (.*)/i, 1] ||
@@ -93,6 +94,7 @@ module DiscourseNntpBridge
     end
 
     if author_user.blank?
+      body = "*Post from NNTP by guest user #{author}*\n\n" + body
       if SiteSetting.nntp_bridge_guest_username?
         author_user = User.where(username: SiteSetting.nntp_bridge_guest_username?).first
       end
@@ -150,13 +152,6 @@ module DiscourseNntpBridge
                   user_id: author_user.id,
                   category_id: category.present? ? category.id : nil,
                   created_at: date,
-    if body.blank?
-
-    else
-      body = body[/.*Xref: [ \w\.:\d]+$?(.*)/m, 1] || body
-    end
-    body = "(empty body from NNTP)" if body.blank?
-
                   updated_at: date
                  ).id
       if !TextSentinel.title_sentinel(old_subject).valid? && SiteSetting.nntp_bridge_override_title_validations?
