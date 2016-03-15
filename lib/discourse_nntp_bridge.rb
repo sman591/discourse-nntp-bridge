@@ -1,4 +1,4 @@
-UNKOWN_USER_ID = 1
+UNKOWN_USER_ID = -1
 $rails_rake_task = true
 
 module DiscourseNntpBridge
