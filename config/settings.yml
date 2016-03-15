@@ -5,6 +5,10 @@ plugins:
   nntp_bridge_override_title_validations:
     default: true
     client: true
+  nntp_bridge_guest_username:
+    default: system
+    type: username
+    client: true
   nntp_bridge_default_newsgroup:
-    default: "general"
+    default: general
     client: true

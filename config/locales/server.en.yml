@@ -2,4 +2,5 @@ en:
   site_settings:
     nntp_bridge_enabled: "Enable the NNTP bridge plugin"
     nntp_bridge_override_title_validations: "Ignore validations on topic titles when post subject from NNTP is invalid"
+    nntp_bridge_guest_username: "Guest username for users who aren't in the system. We recommend creating a \"guest\" user instead of using system."
     nntp_bridge_default_newsgroup: "Default NNTP newsgroup"

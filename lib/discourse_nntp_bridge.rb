@@ -1,4 +1,3 @@
-UNKOWN_USER_ID = -1
 $rails_rake_task = true
 
 module DiscourseNntpBridge
@@ -65,8 +64,8 @@ module DiscourseNntpBridge
     end
 
     body = flowed_decode(body) if headers[/^Content-Type:.*format="?flowed"?/i]
-
     body.rstrip!
+
 
     date = Time.parse(
       headers[/^Injection-Date: (.*)/i, 1] ||
@@ -75,14 +74,13 @@ module DiscourseNntpBridge
     )
     author = header_decode(headers[/^From: (.*)/i, 1])
 
-    matches = /(.+) <(.*)>/.match(author)
-    # todo: support "name<test@test.com>" ?
-    author_name = matches ? matches[1] : ""
-    author_email = matches ? matches[2] : ""
-
-    if author_name.blank?
-      if author =~ /.+@.+/
-        author_email = author
+    if matches = /(.+) <(.*)>/.match(author)
+      # todo: support "name<test@test.com>" ?
+      author_name = matches ? matches[1] : ""
+      author_email = matches ? matches[2] : ""
+    else
+      if matches = /\S+@\S+/.match(author)
+        author_email = matches[0]
       else
         author_email = author
         author_name = author
@@ -92,6 +90,15 @@ module DiscourseNntpBridge
     author_user = User.where(email: author_email).first
     unless author_user
       author_user = User.where(name: author_name).first
+    end
+
+    if author_user.blank?
+      if SiteSetting.nntp_bridge_guest_username?
+        author_user = User.where(username: SiteSetting.nntp_bridge_guest_username?).first
+      end
+      if author_user.blank?
+        author_user = User.find(-1)
+      end
     end
 
     subject = header_decode(headers[/^Subject: (.*)/i, 1])
@@ -140,16 +147,9 @@ module DiscourseNntpBridge
       end
       topic_id = Topic.create!(
                   title: subject,
-                  user_id: author_user.present? ? author_user.id : UNKOWN_USER_ID,
+                  user_id: author_user.id,
                   category_id: category.present? ? category.id : nil,
                   created_at: date,
-                  updated_at: date
-                 ).id
-      if !TextSentinel.title_sentinel(old_subject).valid? && SiteSetting.nntp_bridge_override_title_validations?
-        Topic.find(topic_id).update_attribute(:title, old_subject)
-      end
-    end
-
     if body.blank?
 
     else
@@ -157,10 +157,17 @@ module DiscourseNntpBridge
     end
     body = "(empty body from NNTP)" if body.blank?
 
+                  updated_at: date
+                 ).id
+      if !TextSentinel.title_sentinel(old_subject).valid? && SiteSetting.nntp_bridge_override_title_validations?
+        Topic.find(topic_id).update_attribute(:title, old_subject)
+      end
+    end
+
     post = Post.create!(
             topic_id: topic_id,
             raw: body,
-            user_id: author_user.present? ? author_user.id : UNKOWN_USER_ID,
+            user_id: author_user.id,
             created_at: date,
             updated_at: date
            )
