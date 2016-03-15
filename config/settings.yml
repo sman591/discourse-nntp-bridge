@@ -9,6 +9,9 @@ plugins:
     default: system
     type: username
     client: true
+  nntp_bridge_guest_notice:
+    default: "*Post from NNTP by guest user {author}*"
+    client: true
   nntp_bridge_default_newsgroup:
     default: general
     client: true

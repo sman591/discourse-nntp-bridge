@@ -77,8 +77,8 @@ module DiscourseNntpBridge
 
     if matches = /(.+) <(.*)>/.match(author)
       # todo: support "name<test@test.com>" ?
-      author_name = matches ? matches[1] : ""
-      author_email = matches ? matches[2] : ""
+      author_name = matches[1]
+      author_email = matches[2]
     else
       if matches = /\S+@\S+/.match(author)
         author_email = matches[0]
@@ -94,7 +94,7 @@ module DiscourseNntpBridge
     end
 
     if author_user.blank?
-      body = "*Post from NNTP by guest user #{author}*\n\n" + body
+      body = "#{SiteSetting.nntp_bridge_guest_notice.gsub("{author}", author.strip)}\n\n" + body
       if SiteSetting.nntp_bridge_guest_username?
         author_user = User.where(username: SiteSetting.nntp_bridge_guest_username?).first
       end
