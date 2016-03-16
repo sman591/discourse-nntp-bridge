@@ -10,7 +10,7 @@ plugins:
     type: username
     client: true
   nntp_bridge_guest_notice:
-    default: "*Post from NNTP by guest user {author}*"
+    default: "*Post from NNTP guest {author}*"
     client: true
   nntp_bridge_dethreaded_notice:
     default: "*This post was de-threaded from NNTP. Discourse tried to guess where it belongs, but this may not be correct.*"
