@@ -12,6 +12,15 @@ plugins:
   nntp_bridge_guest_notice:
     default: "*Post from NNTP by guest user {author}*"
     client: true
+  nntp_bridge_dethreaded_notice:
+    default: "*This post was de-threaded from NNTP. Discourse tried to guess where it belongs, but this may not be correct.*"
+    client: true
+  nntp_bridge_empty_body_replacement:
+    default: "*(empty body from NNTP)*"
+    client: true
+  nntp_bridge_invalid_body_replacement:
+    default: "*(invalid body from NNTP)*"
+    client: true
   nntp_bridge_default_newsgroup:
     default: general
     client: true

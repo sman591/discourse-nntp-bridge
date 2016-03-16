@@ -47,9 +47,9 @@ module NNTP
       topic_id = find_or_create_topic_from_article(article, user_id, newsgroup).id
 
       if article.body.blank?
-        article.body = "(empty body from NNTP)"
+        article.body = SiteSetting.nntp_bridge_empty_body_replacement.presence || "*(empty body from NNTP)*"
       elsif not TextSentinel.body_sentinel(article.body).valid?
-        article.body = "(invalid body from NNTP)"
+        article.body = SiteSetting.nntp_bridge_invalid_body_replacement.presence || "*(invalid body from NNTP)*"
       end
 
       post.assign_attributes(
@@ -57,7 +57,7 @@ module NNTP
         topic_id: topic_id,
         created_at: article.created_at,
         updated_at: article.created_at,
-        raw: article.body.presence || "(empty body from NNTP)" # TODO: move into setting
+        raw: article.body
       )
       post.save!
       DiscourseNntpBridge::NntpPost.create!(
@@ -210,8 +210,7 @@ module NNTP
 
     def find_or_create_topic_from_article(article, user_id, newsgroup)
       if article.is_dethreaded
-        # TODO: Make this a site setting
-        article.body.prepend "*This post was de-threaded from NNTP. Discourse tried to guess where it belongs, but this may not be correct.*\n\n"
+        article.body.prepend "#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n"
       end
 
       return article.parent if article.parent

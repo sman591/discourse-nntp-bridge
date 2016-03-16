@@ -4,4 +4,7 @@ en:
     nntp_bridge_override_title_validations: "Ignore validations on topic titles when post subject from NNTP is invalid"
     nntp_bridge_guest_username: "Guest username for users who aren't in the system. We recommend creating a \"guest\" user instead of using system."
     nntp_bridge_guest_notice: "Notice prepended to posts by unregistered/guest users, markdown supported. Use {author} to place the NNTP author field."
+    nntp_bridge_dethreaded_notice: "Notice prepended to posts when NNTP post couldn't guarantee parent ownership."
+    nntp_bridge_empty_body_replacement: "Post body to use when the body from NNTP is blank."
+    nntp_bridge_invalid_body_replacement: "Post body to use when the body from NNTP is invalid."
     nntp_bridge_default_newsgroup: "Default NNTP newsgroup"
