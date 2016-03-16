@@ -59,7 +59,12 @@ module NNTP
         updated_at: article.created_at,
         raw: article.body
       )
-      post.save!
+      begin
+        post.save!
+      rescue PrettyText::JavaScriptError
+        puts "JS error while parsing article #{article.message_id}" if File.basename($0) == 'rake'
+        raise ActiveRecord::Rollback
+      end
       DiscourseNntpBridge::NntpPost.create!(
         message_id: article.message_id,
         post_id: post.id
