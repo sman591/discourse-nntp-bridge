@@ -241,7 +241,8 @@ module NNTP
         user_id: user_id,
         category_id: category_for_newsgroup(newsgroup).id,
         created_at: article.created_at,
-        updated_at: article.created_at
+        updated_at: article.created_at,
+        bumped_at: article.created_at
       )
 
       if !TextSentinel.title_sentinel(old_subject).valid? && SiteSetting.nntp_bridge_override_title_validations?
