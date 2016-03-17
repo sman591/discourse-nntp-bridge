@@ -1,0 +1,33 @@
+language: ruby
+cache:
+  directories:
+    - discourse/vendor/bundle
+services:
+  - postgresql
+  - redis-server
+addons:
+  postgresql: 9.3
+  apt:
+    packages:
+    - gifsicle
+    - jpegoptim
+    - optipng
+    - jhead
+services:
+  - redis-server
+rvm:
+  - 2.0.0
+env:
+  - LOAD_PLUGINS=1
+before_install:
+  - cd discourse
+  - git init
+  - git remote add -t \* -f origin https://github.com/discourse/discourse.git
+  - git checkout tags/latest-release
+  - mkdir plugins/discourse-nntp-bridge
+  - cd ..
+  - mv !(discourse) discourse/plugins/discourse-nntp-bridge/
+  - cd discourse
+script:
+  - bundle exec rake db:create db:migrate
+  - bundle exec rspec plugins/discourse-nntp-bridge/spec
