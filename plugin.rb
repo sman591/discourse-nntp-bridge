@@ -16,10 +16,6 @@ require 'nntp'
 # load the engine
 load File.expand_path('../lib/discourse_nntp_bridge.rb', __FILE__)
 load File.expand_path('../lib/discourse_nntp_bridge/engine.rb', __FILE__)
-
-ENV['NEWS_HOST'] = ''
-ENV['NEWS_USERNAME'] = ''
-ENV['NEWS_PASSWORD'] = ''
 load File.expand_path('../lib/discourse_nntp_bridge/basic_message.rb', __FILE__)
 load File.expand_path('../lib/discourse_nntp_bridge/flowed_format.rb', __FILE__)
 load File.expand_path('../lib/discourse_nntp_bridge/new_post_message.rb', __FILE__)
