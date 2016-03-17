@@ -26,16 +26,13 @@ module DiscourseNntpBridge
       subject: title,
       user: post.user,
     }
-    puts "\n\nNNTP: **********************\n"
     message = NNTP::NewPostMessage.new(new_post_params)
-    puts message.valid?
     message_id = message.transmit
     if message_id.present?
       DiscourseNntpBridge::NntpPost.create(post: post, message_id: message_id)
     else
-      puts "\nNO MESSAGE ID RETURNED\n"
+      puts "No message ID returned when posting post #{post.id} to NNTP"
     end
-    puts "\n/NNTP **********************\n\n\n\n\n\n\n\n\n"
   end
 
   private
