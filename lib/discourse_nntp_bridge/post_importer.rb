@@ -4,7 +4,7 @@ module DiscourseNntpBridge
       @quiet = quiet
     end
 
-    def import!(article:, newsgroup:, post: Post.new)
+    def import!(article, newsgroup, post = Post.new)
       return unless SiteSetting.nntp_bridge_enabled?
 
       ActiveRecord::Base.transaction do

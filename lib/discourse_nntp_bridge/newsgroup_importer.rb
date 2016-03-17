@@ -34,7 +34,7 @@ module DiscourseNntpBridge
       puts
       puts "Importing #{message_ids_to_import.size} posts from #{newsgroup}" if File.basename($0) == 'rake'
       message_ids_to_import.each do |message_id|
-        @importer.import!(article: @server.article(message_id), newsgroup: newsgroup)
+        @importer.import!(@server.article(message_id), newsgroup)
         print '.' if File.basename($0) == 'rake'
       end
     end
