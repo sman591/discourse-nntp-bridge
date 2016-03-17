@@ -1,7 +1,7 @@
 # Decodes and encodes Mail::Message objects from or into the "flowed format"
 # specified in RFC3676 (though without support for the "DelSp" parameter)
 
-module NNTP
+module DiscourseNntpBridge
   module FlowedFormat
     # TODO: This does not actually perform a message-object-to-message-object
     # decoding, it instead returns a string that is the decoded message body,

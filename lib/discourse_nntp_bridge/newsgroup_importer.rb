@@ -1,4 +1,4 @@
-module NNTP
+module DiscourseNntpBridge
   class NewsgroupImporter
     def initialize(quiet: false)
       @server = Server.new
@@ -16,7 +16,7 @@ module NNTP
     end
 
     def sync!(newsgroup)
-      local_message_ids = DiscourseNntpBridge::NntpPost.pluck(:message_id)
+      local_message_ids = NntpPost.pluck(:message_id)
       remote_message_ids = @server.message_ids([newsgroup])
       # message_ids_to_destroy = local_message_ids - remote_message_ids
       message_ids_to_import = remote_message_ids - local_message_ids

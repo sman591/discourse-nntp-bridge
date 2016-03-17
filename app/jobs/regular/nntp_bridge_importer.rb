@@ -7,7 +7,7 @@ module Jobs
       unless @@active_importers.include? newsgroup
         @@active_importers << newsgroup
         begin
-          NNTP::NewsgroupImporter.new(quiet: ENV['QUIET'].present?).sync! newsgroup
+          DiscourseNntpBridge::NewsgroupImporter.new(quiet: ENV['QUIET'].present?).sync! newsgroup
         ensure
           @@active_importers.delete(newsgroup)
         end

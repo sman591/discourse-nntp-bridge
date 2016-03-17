@@ -1,4 +1,4 @@
-module NNTP
+module DiscourseNntpBridge
   class Server
     def newsgroups
       nntp.list[1].map(&:split).map do |fields|

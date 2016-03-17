@@ -6,7 +6,6 @@
 
 enabled_site_setting :nntp_bridge_enabled
 
-
 # install dependencies
 gem 'active_attr', '0.9.0'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
@@ -21,6 +20,12 @@ load File.expand_path('../lib/discourse_nntp_bridge/engine.rb', __FILE__)
 ENV['NEWS_HOST'] = ''
 ENV['NEWS_USERNAME'] = ''
 ENV['NEWS_PASSWORD'] = ''
+load File.expand_path('../lib/discourse_nntp_bridge/basic_message.rb', __FILE__)
+load File.expand_path('../lib/discourse_nntp_bridge/flowed_format.rb', __FILE__)
+load File.expand_path('../lib/discourse_nntp_bridge/new_post_message.rb', __FILE__)
+load File.expand_path('../lib/discourse_nntp_bridge/newsgroup_importer.rb', __FILE__)
+load File.expand_path('../lib/discourse_nntp_bridge/post_importer.rb', __FILE__)
+load File.expand_path('../lib/discourse_nntp_bridge/server.rb', __FILE__)
 
 after_initialize do
 

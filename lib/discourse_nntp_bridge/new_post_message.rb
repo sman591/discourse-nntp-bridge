@@ -1,4 +1,4 @@
-module NNTP
+module DiscourseNntpBridge
   class NewPostMessage < BasicMessage
     attribute :body, type: String, default: ''
     attribute :followup_newsgroup_id, type: String

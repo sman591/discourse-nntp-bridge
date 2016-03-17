@@ -1,4 +1,4 @@
-module NNTP
+module DiscourseNntpBridge
   class BasicMessage
     include ActiveAttr::Model
     include ActiveModel::ForbiddenAttributesProtection
@@ -25,7 +25,7 @@ module NNTP
       #   @was_accepted = true
 
       #   begin
-      #     NNTP::NewsgroupImporter.new.sync!(newsgroups)
+      #     DiscourseNntpBridge::NewsgroupImporter.new.sync!(newsgroups)
       #   rescue
       #     ExceptionNotifier.notify_exception($!)
       #   end

@@ -1,4 +1,4 @@
-module NNTP
+module DiscourseNntpBridge
   class PostImporter
     def initialize(quiet: false)
       @quiet = quiet
