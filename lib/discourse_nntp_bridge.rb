@@ -2,6 +2,8 @@ module DiscourseNntpBridge
   def self.create_article_from_post(post)
     return unless SiteSetting.nntp_bridge_enabled?
 
+    return if post.topic.private_message?
+
     if post.is_first_post?
       title = post.topic.title
       parent_id = nil
