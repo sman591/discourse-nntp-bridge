@@ -4,7 +4,7 @@ module Jobs
 
     def execute(args)
       newsgroup = args[:newsgroup]
-      return if is_active? newsgroup
+      return if self.is_active? newsgroup
       @@active_importers << newsgroup
       begin
         DiscourseNntpBridge::NewsgroupImporter.new(quiet: ENV['QUIET'].present?).sync! newsgroup
