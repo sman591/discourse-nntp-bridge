@@ -29,6 +29,7 @@ after_initialize do
     belongs_to :post
 
     validates :post_id, :message_id, presence: true
+    validates :message_id, uniqueness: true
   end
 
   Post.class_eval do
