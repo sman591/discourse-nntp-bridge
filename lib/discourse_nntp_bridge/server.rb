@@ -36,7 +36,7 @@ module DiscourseNntpBridge
       # Hack to get around nntp-lib trying to authenticate twice in `start`
       # TODO: Figure out why only `original` auth works, it's rather insecure
       @nntp ||= Net::NNTP.start(ENV['NEWS_HOST']).tap do |nntp|
-        nntp.send(:authenticate, ENV['NEWS_USERNAME'], ENV['NEWS_PASSWORD'], :original)
+        nntp.send(:authenticate, ENV['NEWS_USERNAME'], ENV['NEWS_PASSWORD'], :original) if ENV['NEWS_USERNAME'].present? || ENV['NEWS_PASSWORD'].present?
       end
     end
 
