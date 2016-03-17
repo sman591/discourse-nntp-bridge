@@ -35,45 +35,9 @@ after_initialize do
   end
 
   on(:post_created) do |post|
-    create(post)
+    require_dependency File.expand_path('../app/jobs/regular/nntp_bridge_exporter.rb', __FILE__)
+
+    Jobs.enqueue(:nntp_bridge_exporter, post_id: post.id)
   end
-end
-
-def create(post)
-  return unless SiteSetting.nntp_bridge_enabled?
-
-  require './plugins/discourse-nntp-bridge/app/models/nntp/basic_message'
-  require './plugins/discourse-nntp-bridge/app/models/nntp/flowed_format'
-  require './plugins/discourse-nntp-bridge/app/models/nntp/new_post_message'
-  require './plugins/discourse-nntp-bridge/app/models/nntp/newsgroup_importer'
-  require './plugins/discourse-nntp-bridge/app/models/nntp/post_importer'
-  require './plugins/discourse-nntp-bridge/app/models/nntp/server'
-  if post.is_first_post?
-    title = post.topic.title
-    parent_id = nil
-  else
-    title = "Re: " + post.topic.title
-    parent_id = DiscourseNntpBridge::NntpPost.where(post_id: post.topic.first_post.id).first.message_id
-  end
-
-  newsgroup_ids = post.topic.category.custom_fields["nntp_bridge_newsgroup"] || SiteSetting.nntp_bridge_default_newsgroup
-
-  new_post_params = {
-    body: post.raw,
-    parent_id: parent_id,
-    newsgroup_ids: newsgroup_ids,
-    subject: title,
-    user: post.user,
-  }
-  puts "\n\nNNTP: **********************\n"
-  message = NNTP::NewPostMessage.new(new_post_params)
-  puts message.valid?
-  message_id = message.transmit
-  if message_id.present?
-    DiscourseNntpBridge::NntpPost.create(post: post, message_id: message_id)
-  else
-    puts "\nNO MESSAGE ID RETURNED\n"
-  end
-  puts "\n/NNTP **********************\n\n\n\n\n\n\n\n\n"
 
 end
