@@ -5,6 +5,8 @@ module DiscourseNntpBridge
     end
 
     def import!(article:, newsgroup:, post: Post.new)
+      return unless SiteSetting.nntp_bridge_enabled?
+
       ActiveRecord::Base.transaction do
         update_post_from_article(article, post, newsgroup)
         # process_subscriptions(post) unless @quiet

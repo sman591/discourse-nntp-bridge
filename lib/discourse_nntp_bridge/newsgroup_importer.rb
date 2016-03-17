@@ -6,6 +6,8 @@ module DiscourseNntpBridge
     end
 
     def sync_all!
+      return unless SiteSetting.nntp_bridge_enabled?
+
       newsgroups = CategoryCustomField.where(name: "nntp_bridge_newsgroup").pluck(:value).reverse
 
       newsgroups.each do |newsgroup|
@@ -16,6 +18,8 @@ module DiscourseNntpBridge
     end
 
     def sync!(newsgroup)
+      return unless SiteSetting.nntp_bridge_enabled?
+
       local_message_ids = NntpPost.pluck(:message_id)
       remote_message_ids = @server.message_ids([newsgroup])
       # message_ids_to_destroy = local_message_ids - remote_message_ids
