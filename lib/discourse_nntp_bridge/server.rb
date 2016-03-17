@@ -5,7 +5,7 @@ module DiscourseNntpBridge
         RemoteNewsgroup.new.tap do |n|
           n.name = fields[0]
           n.status = fields[3]
-          n.description = newsgroup_descriptions[n.name]
+          # n.description = newsgroup_descriptions[n.name]
         end
       end
     end
