@@ -187,7 +187,7 @@ module DiscourseNntpBridge
     end
 
     def utf8_encode(text)
-      text.encode('UTF-8', invalid: :replace, undef: :replace)
+      text.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
     end
 
     def category_for_newsgroup(newsgroup)
