@@ -39,7 +39,7 @@ module DiscourseNntpBridge
     def to_mail
       mail = Mail.new(from: from_line)
 
-      mail.header['User-Agent'] = 'CSH Discourse'
+      mail.header['User-Agent'] = SiteSetting.nntp_bridge_nntp_user_agent
 
       mail
     end

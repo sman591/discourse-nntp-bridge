@@ -21,6 +21,9 @@ plugins:
   nntp_bridge_invalid_body_replacement:
     default: "*(invalid body from NNTP)*"
     client: true
+  nntp_bridge_nntp_user_agent:
+    default: Discourse NNTP Bridge
+    client: true
   nntp_bridge_default_newsgroup:
     default: general
     client: true

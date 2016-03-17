@@ -7,4 +7,5 @@ en:
     nntp_bridge_dethreaded_notice: "Notice prepended to posts when NNTP post couldn't guarantee parent ownership."
     nntp_bridge_empty_body_replacement: "Post body to use when the body from NNTP is blank."
     nntp_bridge_invalid_body_replacement: "Post body to use when the body from NNTP is invalid."
+    nntp_bridge_nntp_user_agent: "User agent header for NNTP posts created by Discourse"
     nntp_bridge_default_newsgroup: "Default NNTP newsgroup"
