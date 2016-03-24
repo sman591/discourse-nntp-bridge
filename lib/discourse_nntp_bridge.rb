@@ -12,10 +12,11 @@ module DiscourseNntpBridge
       parent_id = NntpPost.where(post_id: post.topic.first_post.id).first.message_id
     end
 
+    body = convert_post_body_quotes post.raw
     newsgroup_ids = post.topic.category.custom_fields["nntp_bridge_newsgroup"].presence || SiteSetting.nntp_bridge_default_newsgroup
 
     new_post_params = {
-      body: post.raw,
+      body: body,
       parent_id: parent_id,
       newsgroup_ids: newsgroup_ids,
       subject: title,
@@ -30,5 +31,22 @@ module DiscourseNntpBridge
     end
   end
 
-  private
+  # private
+
+  def self.convert_post_body_quotes(body)
+    converted_body = ""
+    body.split("[/quote]").each do |section|
+      section.sub! /\n\z/, ''
+      matches = /\[quote.*\]\n*(.*)/m.match section
+      if not matches
+        converted_body << section
+        next
+      end
+      quoted_text = ""
+      matches[1].lines.each { |line| quoted_text << "> #{line}" }
+      section.sub! matches[0], quoted_text
+      converted_body << section
+    end
+    converted_body
+  end
 end
