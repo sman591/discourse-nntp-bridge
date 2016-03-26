@@ -37,13 +37,16 @@ module DiscourseNntpBridge
     converted_body = ""
     body.split("[/quote]").each do |section|
       section.sub! /\n\z/, ''
-      matches = /\[quote.*\]\n*(.*)/m.match section
+      matches = /\[quote="(.*), post.*\]\n*(.*)/m.match section
       if not matches
         converted_body << section
         next
       end
       quoted_text = ""
-      matches[1].lines.each { |line| quoted_text << "> #{line}" }
+      matches[2].lines.each { |line| quoted_text << "> #{line}" }
+      if quoted_text.present?
+        quoted_text = matches[1] + " wrote:\n" + quoted_text
+      end
       section.sub! matches[0], quoted_text
       converted_body << section
     end
