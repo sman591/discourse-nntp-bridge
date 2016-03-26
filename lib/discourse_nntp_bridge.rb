@@ -45,11 +45,17 @@ module DiscourseNntpBridge
       quoted_text = ""
       matches[2].lines.each { |line| quoted_text << "> #{line}" }
       if quoted_text.present?
-        quoted_text = matches[1] + " wrote:\n" + quoted_text
+        quoted_text = self.get_name_from_username(matches[1]) + " wrote:\n" + quoted_text
       end
       section.sub! matches[0], quoted_text
       converted_body << section
     end
     converted_body
+  end
+
+  def self.get_name_from_username(username)
+    user = User.where(username: username).first
+    return username if user.blank? || user.name.blank?
+    user.name
   end
 end

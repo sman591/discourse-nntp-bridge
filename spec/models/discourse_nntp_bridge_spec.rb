@@ -39,8 +39,16 @@ describe DiscourseNntpBridge do
     end
 
     it 'converts multiple quotes to simple syntax' do
-      original_body = "[quote=\"guest, post:1, topic:1\"]\nThis is a quote\n[/quote]\n\nThis is my response\n\n[quote=\"guest, post:1, topic:1\"]\nThis is another quote\n[/quote]\n\nThis is my second response"
-      expected_body = "guest wrote:\n> This is a quote\n\nThis is my response\n\nguest wrote:\n> This is another quote\n\nThis is my second response"
+      original_body = "[quote=\"guest, post:1, topic:1\"]\nThis is a quote\n[/quote]\n\nThis is my response\n\n[quote=\"admin, post:1, topic:1\"]\nThis is another quote\n[/quote]\n\nThis is my second response"
+      expected_body = "guest wrote:\n> This is a quote\n\nThis is my response\n\nadmin wrote:\n> This is another quote\n\nThis is my second response"
+      converted_body = subject.convert_post_body_quotes original_body
+      expect(converted_body).to eq(expected_body)
+    end
+
+    it 'uses author real name' do
+      Fabricate(:user, username: "guest", name: "Guest Account")
+      original_body = "[quote=\"guest, post:1, topic:1\"]\nThis is a quote\n[/quote]"
+      expected_body = "Guest Account wrote:\n> This is a quote"
       converted_body = subject.convert_post_body_quotes original_body
       expect(converted_body).to eq(expected_body)
     end
