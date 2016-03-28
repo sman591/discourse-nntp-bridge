@@ -13,12 +13,14 @@ addons:
     - jpegoptim
     - optipng
     - jhead
+  code_climate:
+    repo_token: 34de2e1d1093068fa2e757bfce3a6214ae11c4b3f63bf36d81ec105c04ac2463
 services:
   - redis-server
 rvm:
   - 2.0.0
 env:
-  - LOAD_PLUGINS=1
+  - LOAD_PLUGINS=1 RUN_COVERAGE=1
 before_install:
   - cd discourse
   - git init
@@ -26,7 +28,9 @@ before_install:
   - git checkout tags/latest-release
   - mkdir plugins/discourse-nntp-bridge
   - cd ..
+  - shopt -s extglob dotglob
   - mv !(discourse) discourse/plugins/discourse-nntp-bridge/
+  - shopt -u dotglob
   - cd discourse
 script:
   - bundle exec rake db:create db:migrate

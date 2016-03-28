@@ -11,6 +11,10 @@ gem 'active_attr', '0.9.0'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
 gem 'rfc2047', '0.3', github: 'ConradIrwin/rfc2047-ruby'
 
+if ENV['RUN_COVERAGE']
+  gem 'codeclimate-test-reporter', '0.5.0', require: nil
+end
+
 require 'nntp'
 
 # load the engine
