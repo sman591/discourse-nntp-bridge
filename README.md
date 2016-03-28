@@ -1,4 +1,4 @@
-# discourse-nntp-bridge [![Build Status](https://travis-ci.org/sman591/discourse-nntp-bridge.svg?branch=master)](https://travis-ci.org/sman591/discourse-nntp-bridge)
+# discourse-nntp-bridge [![Build Status](https://travis-ci.org/sman591/discourse-nntp-bridge.svg?branch=master)](https://travis-ci.org/sman591/discourse-nntp-bridge) [![Code Climate](https://codeclimate.com/github/sman591/discourse-nntp-bridge/badges/gpa.svg)](https://codeclimate.com/github/sman591/discourse-nntp-bridge) [![security](https://hakiri.io/github/sman591/discourse-nntp-bridge/master.svg)](https://hakiri.io/github/sman591/discourse-nntp-bridge/master)
 NNTP bridge to keep NNTP &amp; Discourse in sync
 
 Primarily used for keeping [CSH Discourse](https://discourse.csh.rit.edu) in sync with the CSH news server.
