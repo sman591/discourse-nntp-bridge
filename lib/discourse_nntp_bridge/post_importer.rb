@@ -71,6 +71,9 @@ module DiscourseNntpBridge
         message_id: article.message_id,
         post_id: post.id
       )
+      if post.topic.bumped_at < post.created_at
+        post.topic.update_attribute(:bumped_at, post.created_at)
+      end
     end
 
     # def process_subscriptions(post)
