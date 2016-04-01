@@ -18,3 +18,7 @@ source = File.read(path)
 plugin = Plugin::Instance.new(Plugin::Metadata.parse(source), path)
 plugin.activate!
 plugin.initializers.first.call
+
+require "./plugins/discourse-nntp-bridge/app/jobs/regular/nntp_bridge_exporter"
+require "./plugins/discourse-nntp-bridge/app/jobs/regular/nntp_bridge_importer"
+require "./plugins/discourse-nntp-bridge/app/jobs/scheduled/nntp_bridge_import_scheduler"
