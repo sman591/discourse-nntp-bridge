@@ -208,7 +208,7 @@ module DiscourseNntpBridge
 
       if not user
         article.body.prepend "#{SiteSetting.nntp_bridge_guest_notice.gsub("{author}", article.author_raw)}\n\n"
-        if username = SiteSetting.nntp_bridge_guest_username? && username.present?
+        if username = SiteSetting.nntp_bridge_guest_username.presence
           user = User.where(username: username).first
         end
       end
