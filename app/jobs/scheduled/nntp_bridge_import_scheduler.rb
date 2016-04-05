@@ -6,7 +6,7 @@ module Jobs
       newsgroups = CategoryCustomField.where(name: "nntp_bridge_newsgroup").pluck(:value)
 
       newsgroups.each do |newsgroup|
-        next if Jobs::NntpBridgeImporter.is_active?(newsgroup) || importer_queued?(newsgroup)
+        next if Jobs::NntpBridgeImporter.is_active?(newsgroup) || self.class.importer_queued?(newsgroup)
         Jobs.enqueue(:nntp_bridge_importer, newsgroup: newsgroup)
       end
     end
