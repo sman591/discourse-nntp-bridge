@@ -2,7 +2,7 @@ module Jobs
   class NntpBridgeImportScheduler < Jobs::Scheduled
     every 1.minute
 
-    def execute(newsgroup)
+    def execute(args)
       newsgroups = CategoryCustomField.where(name: "nntp_bridge_newsgroup").pluck(:value)
 
       newsgroups.each do |newsgroup|
