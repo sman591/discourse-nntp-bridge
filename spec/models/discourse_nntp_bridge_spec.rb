@@ -62,6 +62,11 @@ describe DiscourseNntpBridge do
         post = Fabricate(:post, post_type: 3)
         expect(subject.create_article_from_post post).to eq(nil)
       end
+
+      it 'will not process moderator action posts' do
+        post = Fabricate(:post, post_type: 2)
+        expect(subject.create_article_from_post post).to eq(nil)
+      end
     end
   end
 
