@@ -53,6 +53,16 @@ describe DiscourseNntpBridge do
       expect(converted_body).to eq(expected_body)
     end
 
+    context "with plugin settings" do
+      before do
+        SiteSetting.load_settings(File.join(Rails.root, 'plugins', 'discourse-nntp-bridge', 'config', 'settings.yml'))
+      end
+
+      it 'will not process small action posts' do
+        post = Fabricate(:post, post_type: 3)
+        expect(subject.create_article_from_post post).to eq(nil)
+      end
+    end
   end
 
 end

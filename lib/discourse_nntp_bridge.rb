@@ -3,6 +3,7 @@ module DiscourseNntpBridge
     return unless SiteSetting.nntp_bridge_enabled?
 
     return if post.topic.private_message?
+    return if post.post_type == Post.types[:small_action]
 
     if post.is_first_post?
       title = post.topic.title
