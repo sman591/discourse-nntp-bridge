@@ -16,16 +16,7 @@ if ENV['RUN_COVERAGE']
 end
 
 require 'nntp'
-
-# load the engine
-load File.expand_path('../lib/discourse_nntp_bridge.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/engine.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/basic_message.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/flowed_format.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/new_post_message.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/newsgroup_importer.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/post_importer.rb', __FILE__)
-load File.expand_path('../lib/discourse_nntp_bridge/server.rb', __FILE__)
+require_relative 'lib/discourse_nntp_bridge'
 
 after_initialize do
 

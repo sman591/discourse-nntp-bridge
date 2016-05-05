@@ -1,4 +1,12 @@
 module DiscourseNntpBridge
+  require_relative 'discourse_nntp_bridge/engine'
+  require_relative 'discourse_nntp_bridge/basic_message'
+  require_relative 'discourse_nntp_bridge/flowed_format'
+  require_relative 'discourse_nntp_bridge/new_post_message'
+  require_relative 'discourse_nntp_bridge/newsgroup_importer'
+  require_relative 'discourse_nntp_bridge/post_importer'
+  require_relative 'discourse_nntp_bridge/server'
+
   def self.create_article_from_post(post)
     return unless SiteSetting.nntp_bridge_enabled?
 
