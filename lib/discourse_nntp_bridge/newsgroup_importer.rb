@@ -23,8 +23,9 @@ module DiscourseNntpBridge
       local_message_ids = NntpPost.pluck(:message_id)
       remote_message_ids = @server.message_ids([newsgroup])
       # message_ids_to_destroy = local_message_ids - remote_message_ids
-      message_ids_to_import = remote_message_ids - local_message_ids
-      message_ids_to_import = message_ids_to_import
+      ignore_ids = SiteSetting.nntp_bridge_ignore_messages.split(",").collect(&:strip)
+
+      message_ids_to_import = remote_message_ids - local_message_ids - ignore_ids
 
       # if message_ids_to_destroy.any?
       #   puts "Deleting #{message_ids_to_destroy.size} posts" if File.basename($0) == 'rake'
