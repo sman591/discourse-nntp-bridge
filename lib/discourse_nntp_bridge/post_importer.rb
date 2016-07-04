@@ -112,9 +112,9 @@ module DiscourseNntpBridge
         parent_from_references = DiscourseNntpBridge::NntpPost.find_by(message_id: references[-1])
         root_from_references = DiscourseNntpBridge::NntpPost.find_by(message_id: references[0])
 
-        if parent_from_references.present?
+        if parent_from_references.present? && parent_from_references.post.present?
           Threading.new(parent_from_references.post.topic, true)
-        elsif root_from_references.present?
+        elsif root_from_references.present? && root_from_references.post.present?
           Threading.new(root_from_references.post.topic)
         end
       end
