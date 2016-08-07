@@ -1,3 +1,5 @@
+sudo: required # required: https://github.com/discourse/mini_racer#travis-ci
+dist: trusty # required: https://github.com/discourse/mini_racer#travis-ci
 language: ruby
 cache:
   directories:
@@ -19,6 +21,7 @@ services:
   - redis-server
 rvm:
   - 2.0.0
+  - 2.3.1
 env:
   - LOAD_PLUGINS=1 RUN_COVERAGE=1
 before_install:
@@ -33,5 +36,5 @@ before_install:
   - shopt -u dotglob
   - cd discourse
 script:
-  - bundle exec rake db:create db:migrate
-  - bundle exec rspec plugins/discourse-nntp-bridge/spec
+  - bundle exec rake db:create db:migrate db:test:prepare
+  - bundle exec rake plugin:spec[discourse-nntp-bridge]
