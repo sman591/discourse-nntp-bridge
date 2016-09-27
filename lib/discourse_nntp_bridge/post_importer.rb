@@ -28,9 +28,10 @@ module DiscourseNntpBridge
       article.author_email = author_email_from_message(mail)
       article.subject = header_from_message(mail, 'Subject')
       article.created_at = date_from_message(mail)
+      article.control = header_from_message(mail, 'Control')
 
       article.headers, article.body = headers_and_body_from_message(mail)
-      threading = guess_threading_for_post(article, newsgroup)
+      threading = newsgroup == "control.cancel" ? Threading.new(nil, true) : guess_threading_for_post(article, newsgroup)
 
       article.parent = threading.parent
       article.is_dethreaded = !threading.is_correct
@@ -46,6 +47,21 @@ module DiscourseNntpBridge
       article = create_article_from_nntp(article, newsgroup)
 
       user_id = find_user_from_article(article).id
+
+      if newsgroup == "control.cancel"
+        puts article.control
+        if /^cancel <(.*)>/ =~ article.control
+          DiscourseNntpBridge::NntpPost.where(message_id: $1).each do |nntp_post|
+            if nntp_post.post
+              puts "Destroying #{nntp_post.id} (#{nntp_post.post.id})"
+              PostDestroyer.new(Discourse.system_user, nntp_post.post).destroy
+            else
+              puts "Post doesn't exist for #{nntp_post.id}, skipping deletion"
+            end
+          end
+        end
+      end
+
       topic_id = find_or_create_topic_from_article(article, user_id, newsgroup).id
 
       if article.body.blank?
@@ -270,7 +286,8 @@ module DiscourseNntpBridge
       :subject,
       :created_at,
       :parent,
-      :is_dethreaded
+      :is_dethreaded,
+      :control
     )
   end
 end
