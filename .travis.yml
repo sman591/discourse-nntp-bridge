@@ -19,9 +19,6 @@ addons:
     repo_token: 34de2e1d1093068fa2e757bfce3a6214ae11c4b3f63bf36d81ec105c04ac2463
 services:
   - redis-server
-rvm:
-  - 2.0.0
-  - 2.3.1
 env:
   - LOAD_PLUGINS=1 RUN_COVERAGE=1
 before_install:
