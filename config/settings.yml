@@ -25,7 +25,7 @@ plugins:
     default: Discourse NNTP Bridge
     client: true
   nntp_bridge_default_newsgroup:
-    default: general
+    default: ""
     client: true
   nntp_bridge_ignore_messages:
     default: ""
