@@ -32,6 +32,8 @@ before_install:
   - mv !(discourse) discourse/plugins/discourse-nntp-bridge/
   - shopt -u dotglob
   - cd discourse
+  - echo "gem 'simplecov'" >> Gemfile
+  - bundle install
 script:
   - bundle exec rake db:create db:migrate db:test:prepare
   - bundle exec rake plugin:spec[discourse-nntp-bridge]
