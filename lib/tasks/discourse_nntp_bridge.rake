@@ -20,6 +20,12 @@ namespace :discourse_nntp_bridge do
       begin
         print "Newsgroup: "
         input = STDIN.gets.strip.downcase
+        duplicates = CategoryCustomField.where(name: "nntp_bridge_newsgroup", value: input)
+        if duplicates.count > 0
+          duplicate_names = "'" + duplicates.map(&:category).map(&:full_slug).join("' and '") + "'"
+          puts "#{input} is already assigned to #{duplicate_names}"
+          redo
+        end
       end until newsgroups.include?(input)
 
       CategoryCustomField.create!(
