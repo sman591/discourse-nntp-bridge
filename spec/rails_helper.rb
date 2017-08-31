@@ -2,7 +2,8 @@ require "rails_helper"
 
 if ENV['RUN_COVERAGE']
   require 'simplecov'
-  require "codeclimate-test-reporter"
+  require 'codeclimate-test-reporter'
+  require 'fakeweb'
   CodeClimate::TestReporter.configure do |config|
     config.path_prefix = "discourse" #the root of your Rails application relative to the repository root
     config.git_dir = "plugins/discourse-nntp-bridge" #the relative or absolute location of your git root compared to where your tests are run
