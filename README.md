@@ -16,3 +16,22 @@ Primarily used for keeping [CSH Discourse](https://discourse.csh.rit.edu) in syn
 The only required environment variable is `NEWS_HOST`. `NEWS_USERNAME` and `NEWS_PASSWORD` are both optional, and at least one of the two must be present in order to send authentication along with NNTP.
 
 Most of the NNTP communication was written by Alex Grant for [CSH WebNews](https://github.com/grantovich/CSH-WebNews), and is used/adapted upon heavily throughout this plugin.
+
+## Development
+
+Development requires running a local copy of the latest-release of Discourse.
+
+Assuming you store repositories in `~/dev`, the Discourse repo should be located at `~/dev/discourse` and the NNTP bridge repo should be at `~/dev/discourse-nntp-bridge`.
+
+```bash
+cd ~/dev/
+git clone git@github.com:discourse/discourse.git
+cd discourse
+git fetch --tags
+git checkout tags/latest-release
+cd plugins && ln -s ../../discourse-nntp-bridge && cd ../
+```
+
+This clones Discourse, checks out the `latest-release` tag, and adds `discourse-nntp-bridge` to the plugin directory via a symlink --- making it easy to make changes to the plugin in development.
+
+After this, you'll want to get Discourse set up & running locally. See [Discourse's README](https://github.com/discourse/discourse/blob/latest-release/README.md#development) for more info!
