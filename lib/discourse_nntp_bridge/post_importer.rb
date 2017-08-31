@@ -201,21 +201,24 @@ module DiscourseNntpBridge
     end
 
     def find_user_from_article(article)
-      user = User.with_email(article.author_email).first ||
+      find_existing_user(article) || use_default_user!(article)
+    end
+
+    def find_existing_user(article)
+      User.with_email(article.author_email).first ||
         User.where(name: article.author_name).first ||
         User.with_email(article.author_raw).first ||
         User.where(name: article.author_raw).first
+    end
 
-      if not user
-        article.body.prepend "#{SiteSetting.nntp_bridge_guest_notice.gsub("{author}", article.author_raw)}\n\n"
-        if username = SiteSetting.nntp_bridge_guest_username.presence
-          user = User.where(username: username).first
-        end
+    def use_default_user!(article)
+      notice = "#{SiteSetting.nntp_bridge_guest_notice.gsub('{author}', article.author_raw)}\n\n"
+      article.body.prepend(notice)
+      guest_username = SiteSetting.nntp_bridge_guest_username
+      if guest_username.present?
+        user = User.where(username: username).first
       end
-
-      user = User.find(-1) if not user
-
-      user
+      user || User.find(-1)
     end
 
     def find_or_create_topic_from_article(article, user_id, newsgroup)
