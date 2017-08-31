@@ -43,7 +43,7 @@ module DiscourseNntpBridge
           line.rstrip!
           quotes = ''
           if line[/^>/]
-            quotes = line[/^([> ]*>)/, 1].gsub(' ', '')
+            quotes = line[/^([> ]*>)/, 1].delete(' ')
             line.gsub!(/^[> ]*>/, '')
           end
           line = ' ' + line if line[/^ /]
