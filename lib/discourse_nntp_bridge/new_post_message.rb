@@ -46,9 +46,7 @@ module DiscourseNntpBridge
     end
 
     def parent_message
-      @parent_message ||= if parent.present?
-        parent_id
-      end
+      @parent_message ||= parent.present? ? parent_id : nil
     end
 
     def parent
