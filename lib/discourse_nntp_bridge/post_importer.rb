@@ -201,9 +201,9 @@ module DiscourseNntpBridge
     end
 
     def find_user_from_article(article)
-      user = User.where(email: article.author_email).first ||
+      user = User.with_email(article.author_email).first ||
         User.where(name: article.author_name).first ||
-        User.where(email: article.author_raw).first ||
+        User.with_email(article.author_raw).first ||
         User.where(name: article.author_raw).first
 
       if not user
