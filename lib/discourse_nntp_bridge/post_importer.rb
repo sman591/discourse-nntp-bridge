@@ -215,15 +215,13 @@ module DiscourseNntpBridge
       notice = "#{SiteSetting.nntp_bridge_guest_notice.gsub('{author}', article.author_raw)}\n\n"
       article.body.prepend(notice)
       guest_username = SiteSetting.nntp_bridge_guest_username
-      if guest_username.present?
-        user = User.where(username: username).first
-      end
+      user = User.where(username: guest_username).first if guest_username.present?
       user || User.find(-1)
     end
 
     def find_or_create_topic_from_article(article, user_id, newsgroup)
       if article.is_dethreaded
-        article.body.prepend "#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n"
+        article.body.prepend("#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n")
       end
 
       return article.parent if article.parent
@@ -238,8 +236,7 @@ module DiscourseNntpBridge
           subject = "Temporary subject for complexity reasons"
           # todo: this could error if the site doesn't allow duplicate titles
         else
-          puts if File.basename($0) == 'rake'
-          puts "Invalid subject from message #{article.message_id}, skipping" if File.basename($0) == 'rake'
+          puts "\nInvalid subject from message #{article.message_id}, skipping" if File.basename($0) == 'rake'
           raise ActiveRecord::Rollback
         end
       end
