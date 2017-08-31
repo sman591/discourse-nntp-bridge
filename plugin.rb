@@ -19,7 +19,6 @@ require 'nntp'
 require_relative 'lib/discourse_nntp_bridge'
 
 after_initialize do
-
   class DiscourseNntpBridge::NntpPost < ActiveRecord::Base
     belongs_to :post
 
@@ -36,5 +35,4 @@ after_initialize do
 
     Jobs.enqueue(:nntp_bridge_exporter, post_id: post.id)
   end
-
 end

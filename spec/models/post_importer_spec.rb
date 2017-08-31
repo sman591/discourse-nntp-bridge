@@ -1,11 +1,9 @@
 require "./plugins/discourse-nntp-bridge/spec/rails_helper"
 
 describe DiscourseNntpBridge::PostImporter do
-
   subject { DiscourseNntpBridge::PostImporter.new }
 
   describe '.find_user_from_article' do
-
     let!(:article) { DiscourseNntpBridge::PostImporter::Article.new }
 
     context 'with a known author' do
@@ -46,7 +44,6 @@ describe DiscourseNntpBridge::PostImporter do
           expect(found_user).to eq(user)
         end
       end
-
     end
 
     context 'with an unkown author' do
@@ -86,9 +83,6 @@ describe DiscourseNntpBridge::PostImporter do
           expect(article.body).to eq("*Post from NNTP guest I don't exist*\n\nHello world!")
         end
       end
-
     end
-
   end
-
 end

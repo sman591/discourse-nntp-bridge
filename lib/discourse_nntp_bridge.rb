@@ -46,7 +46,7 @@ module DiscourseNntpBridge
   def self.convert_post_body_quotes(body)
     converted_body = ""
     body.split("[/quote]").each do |section|
-      section.sub! /\n\z/, ''
+      section.sub!(/\n\z/, '')
       matches = /\[quote="(.*), post.*\]\n*(.*)/m.match section
       if not matches
         converted_body << section
