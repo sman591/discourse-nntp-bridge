@@ -34,6 +34,8 @@ before_install:
   - cd discourse
   - echo "gem 'simplecov'" >> Gemfile
   - bundle install
+  - gem install codeclimate-test-reporter
 script:
   - bundle exec rake db:create db:migrate db:test:prepare
   - bundle exec rake plugin:spec[discourse-nntp-bridge]
+  - codeclimate-test-reporter --path-prefix="plugins/discourse-nntp-bridge"
