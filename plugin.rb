@@ -7,7 +7,7 @@
 enabled_site_setting :nntp_bridge_enabled
 
 # install dependencies
-gem 'active_attr', '0.10.2'
+gem 'active_attr', '0.10.3'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
 gem 'rfc2047', '0.3', github: 'ConradIrwin/rfc2047-ruby'
 
