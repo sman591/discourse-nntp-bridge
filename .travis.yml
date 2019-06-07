@@ -20,7 +20,7 @@ addons:
 services:
   - redis-server
 env:
-  - LOAD_PLUGINS=1 RUN_COVERAGE=1
+  - LOAD_PLUGINS=1 RUN_COVERAGE=1 RAILS_ENV=test
 before_install:
   - cd discourse
   - git init
