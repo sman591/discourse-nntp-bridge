@@ -217,7 +217,7 @@ module DiscourseNntpBridge
 
     def use_default_user!(article)
       notice = "#{SiteSetting.nntp_bridge_guest_notice.gsub('{author}', article.author_raw)}\n\n"
-      article.body.prepend(notice)
+      article.body = notice + article.body
       guest_username = SiteSetting.nntp_bridge_guest_username
       user = User.where(username: guest_username).first if guest_username.present?
       user || User.find(-1)

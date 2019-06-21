@@ -46,7 +46,7 @@ module DiscourseNntpBridge
   # private
 
   def self.convert_post_body_quotes(body)
-    converted_body = ''
+    converted_body = +''
     body.split('[/quote]').each do |section|
       section.sub!(/\n\z/, '')
       matches = /\[quote="(.*), post.*\]\n*(.*)/m.match section
@@ -54,7 +54,7 @@ module DiscourseNntpBridge
         converted_body << section
         next
       end
-      quoted_text = ''
+      quoted_text = +''
       matches[2].lines.each { |line| quoted_text << "> #{line}" }
       if quoted_text.present?
         quoted_text = get_name_from_username(matches[1]) + " wrote:\n\n" + quoted_text
