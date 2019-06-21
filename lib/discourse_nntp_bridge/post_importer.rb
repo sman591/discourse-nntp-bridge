@@ -179,7 +179,7 @@ module DiscourseNntpBridge
 
     def headers_and_body_from_message(mail)
       target_part = mail
-      headers = mail.header.raw_source
+      headers = mail.header.raw_source.dup
 
       if mail.multipart?
         target_part = mail.text_part.presence || mail.parts.first
@@ -225,7 +225,7 @@ module DiscourseNntpBridge
 
     def find_or_create_topic_from_article(article, user_id, newsgroup)
       if article.is_dethreaded
-        article.body.prepend("#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n")
+        article.body = "#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n" + article.body
       end
 
       return article.parent if article.parent
