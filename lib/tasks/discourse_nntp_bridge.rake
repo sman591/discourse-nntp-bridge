@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 namespace :discourse_nntp_bridge do
-  desc "Utility to assign NNTP newsgroups to categories"
+  desc 'Utility to assign NNTP newsgroups to categories'
   task assign_newsgroups: :environment do
-    assigned_categories = CategoryCustomField.where(name: "nntp_bridge_newsgroup").pluck(:category_id)
+    assigned_categories = CategoryCustomField.where(name: 'nntp_bridge_newsgroup').pluck(:category_id)
     categories_to_assign = Category.pluck(:id) - assigned_categories
     newsgroups = DiscourseNntpBridge::Server.new.newsgroups.map(&:name)
 
@@ -13,14 +15,14 @@ namespace :discourse_nntp_bridge do
       begin
         print "Assign #{category.full_slug} a newsgroup? (y/n): "
         input = STDIN.gets.strip.downcase
-      end until %w(y n).include?(input)
+      end until %w[y n].include?(input)
 
-      next if input == "n"
+      next if input == 'n'
 
       begin
-        print "Newsgroup: "
+        print 'Newsgroup: '
         input = STDIN.gets.strip.downcase
-        duplicates = CategoryCustomField.where(name: "nntp_bridge_newsgroup", value: input)
+        duplicates = CategoryCustomField.where(name: 'nntp_bridge_newsgroup', value: input)
         if duplicates.count > 0
           duplicate_names = "'" + duplicates.map(&:category).map(&:full_slug).join("' and '") + "'"
           puts "#{input} is already assigned to #{duplicate_names}"
@@ -30,7 +32,7 @@ namespace :discourse_nntp_bridge do
 
       CategoryCustomField.create!(
         category_id: category_id,
-        name: "nntp_bridge_newsgroup",
+        name: 'nntp_bridge_newsgroup',
         value: input
       )
     end

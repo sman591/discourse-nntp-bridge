@@ -1,11 +1,11 @@
-require "./plugins/discourse-nntp-bridge/spec/rails_helper"
+# frozen_string_literal: true
+
+require './plugins/discourse-nntp-bridge/spec/rails_helper'
 
 describe DiscourseNntpBridge do
-
   subject { DiscourseNntpBridge }
 
   describe 'create_article_from_post' do
-
     it 'leaves quote-less body as-is' do
       original_body = "Hello world!\nThis post has no quotes."
       converted_body = subject.convert_post_body_quotes original_body
@@ -31,7 +31,7 @@ describe DiscourseNntpBridge do
         "[quote=\"guest, post:1, topic:1\"]\n[/quote]",
         "[quote=\"guest, post:1, topic:1\"]\n\n[/quote]"
       ]
-      expected_body = ""
+      expected_body = ''
       original_bodies.each do |original_body|
         converted_body = subject.convert_post_body_quotes original_body
         expect(converted_body).to eq(expected_body)
@@ -46,28 +46,27 @@ describe DiscourseNntpBridge do
     end
 
     it 'uses author real name' do
-      Fabricate(:user, username: "guest", name: "Guest Account")
+      Fabricate(:user, username: 'guest', name: 'Guest Account')
       original_body = "[quote=\"guest, post:1, topic:1\"]\nThis is a quote\n[/quote]"
       expected_body = "Guest Account wrote:\n\n> This is a quote"
       converted_body = subject.convert_post_body_quotes original_body
       expect(converted_body).to eq(expected_body)
     end
 
-    context "with plugin settings" do
+    context 'with plugin settings' do
       before do
         SiteSetting.load_settings(File.join(Rails.root, 'plugins', 'discourse-nntp-bridge', 'config', 'settings.yml'))
       end
 
       it 'will not process small action posts' do
         post = Fabricate(:post, post_type: 3)
-        expect(subject.create_article_from_post post).to eq(nil)
+        expect(subject.create_article_from_post(post)).to eq(nil)
       end
 
       it 'will not process moderator action posts' do
         post = Fabricate(:post, post_type: 2)
-        expect(subject.create_article_from_post post).to eq(nil)
+        expect(subject.create_article_from_post(post)).to eq(nil)
       end
     end
   end
-
 end

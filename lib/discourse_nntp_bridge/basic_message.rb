@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DiscourseNntpBridge
   class BasicMessage
     include ActiveAttr::Model
@@ -15,12 +17,12 @@ module DiscourseNntpBridge
 
       message_id = begin
         Server.new.post(to_mail.to_s)
-      rescue Net::NNTPError
-        errors.add(:nntp, $!.message)
-        nil
+                   rescue Net::NNTPError
+                     errors.add(:nntp, $ERROR_INFO.message)
+                     nil
       end
 
-      return message_id
+      message_id
       # if message_id.present?
       #   @was_accepted = true
 

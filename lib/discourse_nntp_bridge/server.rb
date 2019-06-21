@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DiscourseNntpBridge
   class Server
     def newsgroups
@@ -12,7 +14,7 @@ module DiscourseNntpBridge
 
     def message_ids(newsgroup_names = [])
       wildmat = newsgroup_names.any? ? newsgroup_names.join(',') : '*'
-      nntp.newnews(wildmat, '19700101', '000000')[1].uniq.map{ |message_id| message_id[1..-2] }
+      nntp.newnews(wildmat, '19700101', '000000')[1].uniq.map { |message_id| message_id[1..-2] }
     end
 
     def article(message_id)
@@ -29,7 +31,7 @@ module DiscourseNntpBridge
 
     def newsgroup_descriptions
       @newsgroup_descriptions ||=
-        nntp.list('newsgroups')[1].map{ |line| line.split(/\t+/) }.to_h
+        nntp.list('newsgroups')[1].map { |line| line.split(/\t+/) }.to_h
     end
 
     def nntp

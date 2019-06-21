@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DiscourseNntpBridge
   class NewPostMessage < BasicMessage
     attribute :body, type: String, default: ''
@@ -15,7 +17,8 @@ module DiscourseNntpBridge
 
     def to_mail
       mail = super
-      mail.subject, mail.body = subject, body
+      mail.subject = subject
+      mail.body = body
       mail = FlowedFormat.encode_message(mail)
 
       mail.header['Newsgroups'] = newsgroup_ids
@@ -27,7 +30,7 @@ module DiscourseNntpBridge
         # Mail gem does not automatically wrap Message-IDs in brackets
         mail.references = [
           parent_message
-        ].flatten.compact.map{ |message_id| "<#{message_id}>" }
+        ].flatten.compact.map { |message_id| "<#{message_id}>" }
       end
 
       mail
