@@ -1,4 +1,6 @@
-require "./plugins/discourse-nntp-bridge/spec/rails_helper"
+# frozen_string_literal: true
+
+require './plugins/discourse-nntp-bridge/spec/rails_helper'
 
 describe DiscourseNntpBridge::PostImporter do
   subject { DiscourseNntpBridge::PostImporter.new }
@@ -7,10 +9,10 @@ describe DiscourseNntpBridge::PostImporter do
     let!(:article) { DiscourseNntpBridge::PostImporter::Article.new }
 
     context 'with a known author' do
-      let!(:user) { Fabricate(:user, email: "test@example.com", name: "Test User") }
+      let!(:user) { Fabricate(:user, email: 'test@example.com', name: 'Test User') }
 
       context 'with only a valid author_email' do
-        before { article.author_email = "test@example.com" }
+        before { article.author_email = 'test@example.com' }
 
         it 'finds the user' do
           found_user = subject.send(:find_user_from_article, article)
@@ -19,7 +21,7 @@ describe DiscourseNntpBridge::PostImporter do
       end
 
       context 'with only a valid author_name' do
-        before { article.author_name = "Test User" }
+        before { article.author_name = 'Test User' }
 
         it 'finds the user' do
           found_user = subject.send(:find_user_from_article, article)
@@ -28,7 +30,7 @@ describe DiscourseNntpBridge::PostImporter do
       end
 
       context 'with only an unparsed author_raw that has an email' do
-        before { article.author_raw = "test@example.com" }
+        before { article.author_raw = 'test@example.com' }
 
         it 'finds the user' do
           found_user = subject.send(:find_user_from_article, article)
@@ -37,7 +39,7 @@ describe DiscourseNntpBridge::PostImporter do
       end
 
       context 'with only an unparsed author_raw that has a name' do
-        before { article.author_raw = "Test User" }
+        before { article.author_raw = 'Test User' }
 
         it 'finds the user' do
           found_user = subject.send(:find_user_from_article, article)
@@ -49,12 +51,12 @@ describe DiscourseNntpBridge::PostImporter do
     context 'with an unkown author' do
       before do
         SiteSetting.load_settings(File.join(Rails.root, 'plugins', 'discourse-nntp-bridge', 'config', 'settings.yml'))
-        article.body = "Hello world!"
+        article.body = 'Hello world!'
         article.author_raw = "I don't exist"
       end
 
       context 'with the default bridge settings' do
-        let!(:user) { User.find_by(username: "system") }
+        let!(:user) { User.find_by(username: 'system') }
         let!(:found_user) { subject.send(:find_user_from_article, article) }
 
         it 'uses the system user' do
@@ -68,11 +70,11 @@ describe DiscourseNntpBridge::PostImporter do
 
       context 'with a custom guest username set' do
         before do
-          Fabricate(:user, username: "my_guest", email: "my_guest@example.com", name: "Guest Account")
-          SiteSetting.nntp_bridge_guest_username = "my_guest"
+          Fabricate(:user, username: 'my_guest', email: 'my_guest@example.com', name: 'Guest Account')
+          SiteSetting.nntp_bridge_guest_username = 'my_guest'
         end
 
-        let!(:user) { User.find_by(username: "my_guest") }
+        let!(:user) { User.find_by(username: 'my_guest') }
         let!(:found_user) { subject.send(:find_user_from_article, article) }
 
         it 'uses the custom set user' do

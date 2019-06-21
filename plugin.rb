@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # name: discourse-nntp-bridge
 # about: Discourse plugin to keep NNTP & Discourse in sync
 # version: 0.1.13
@@ -11,9 +13,7 @@ gem 'active_attr', '0.10.3'
 gem 'thoughtafter-nntp', '1.0.0.3', require: false
 gem 'rfc2047', '0.3', github: 'ConradIrwin/rfc2047-ruby'
 
-if ENV['RUN_COVERAGE']
-  gem 'codeclimate-test-reporter', '0.5.0', require: nil
-end
+gem 'codeclimate-test-reporter', '0.5.0', require: nil if ENV['RUN_COVERAGE']
 
 require 'nntp'
 require_relative 'lib/discourse_nntp_bridge'
@@ -31,7 +31,7 @@ after_initialize do
   end
 
   on(:post_created) do |post|
-    require_dependency File.expand_path('../app/jobs/regular/nntp_bridge_exporter.rb', __FILE__)
+    require_dependency File.expand_path('app/jobs/regular/nntp_bridge_exporter.rb', __dir__)
 
     Jobs.enqueue(:nntp_bridge_exporter, post_id: post.id)
   end

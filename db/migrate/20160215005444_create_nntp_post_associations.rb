@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateNntpPostAssociations < ActiveRecord::Migration[4.2]
   def change
     create_table :discourse_nntp_bridge_nntp_posts do |t|

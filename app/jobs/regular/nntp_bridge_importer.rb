@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jobs
   class NntpBridgeImporter < Jobs::Base
     @@active_importers = []
@@ -5,6 +7,7 @@ module Jobs
     def execute(args)
       newsgroup = args[:newsgroup]
       return if self.class.is_active? newsgroup
+
       @@active_importers << newsgroup
       begin
         DiscourseNntpBridge::NewsgroupImporter.new(quiet: ENV['QUIET'].present?).sync! newsgroup

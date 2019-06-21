@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DiscourseNntpBridge
   class PostImporter
     def initialize(quiet: false)
@@ -49,9 +51,9 @@ module DiscourseNntpBridge
       topic_id = find_or_create_topic_from_article(article, user_id, newsgroup).id
 
       if article.body.blank?
-        article.body = SiteSetting.nntp_bridge_empty_body_replacement.presence || "*(empty body from NNTP)*"
-      elsif not TextSentinel.body_sentinel(article.body).valid?
-        article.body = SiteSetting.nntp_bridge_invalid_body_replacement.presence || "*(invalid body from NNTP)*"
+        article.body = SiteSetting.nntp_bridge_empty_body_replacement.presence || '*(empty body from NNTP)*'
+      elsif !TextSentinel.body_sentinel(article.body).valid?
+        article.body = SiteSetting.nntp_bridge_invalid_body_replacement.presence || '*(invalid body from NNTP)*'
       end
 
       post.assign_attributes(
@@ -64,7 +66,7 @@ module DiscourseNntpBridge
       begin
         post.save!
       rescue PrettyText::JavaScriptError
-        puts "JS error while parsing article #{article.message_id}" if File.basename($0) == 'rake'
+        puts "JS error while parsing article #{article.message_id}" if File.basename($PROGRAM_NAME) == 'rake'
         raise ActiveRecord::Rollback
       end
       DiscourseNntpBridge::NntpPost.create!(
@@ -124,22 +126,20 @@ module DiscourseNntpBridge
       if article.subject =~ /Re:/i
         topics = category_for_newsgroup(newsgroup).topics
         guessed_topic = topics
-          .where(
-            'created_at < ? AND created_at > ?',
-            article.created_at,
-            article.created_at - 3.months
-          )
-          .where(
-            'title = ? OR title = ? OR title = ?',
-            article.subject,
-            article.subject.sub(/^Re: ?/i, ''),
-            article.subject.sub(/^Re: ?(\[.+\] )?/i, '')
-          )
-          .order(:created_at).first
+                        .where(
+                          'created_at < ? AND created_at > ?',
+                          article.created_at,
+                          article.created_at - 3.months
+                        )
+                        .where(
+                          'title = ? OR title = ? OR title = ?',
+                          article.subject,
+                          article.subject.sub(/^Re: ?/i, ''),
+                          article.subject.sub(/^Re: ?(\[.+\] )?/i, '')
+                        )
+                        .order(:created_at).first
 
-        if guessed_topic.present?
-          Threading.new(guessed_topic)
-        end
+        Threading.new(guessed_topic) if guessed_topic.present?
       end
     end
 
@@ -162,20 +162,24 @@ module DiscourseNntpBridge
     end
 
     def author_name_from_message(mail)
-      utf8_encode(mail.header['From'].addrs.first.display_name) rescue nil
+      utf8_encode(mail.header['From'].addrs.first.display_name)
+    rescue StandardError
+      nil
     end
 
     def author_email_from_message(mail)
-      utf8_encode(mail.header['From'].addrs.first.address) rescue nil
+      utf8_encode(mail.header['From'].addrs.first.address)
+    rescue StandardError
+      nil
     end
 
     def date_from_message(mail)
-      DATE_HEADERS.map{ |h| mail.header[h] }.compact.first.to_s.to_datetime
+      DATE_HEADERS.map { |h| mail.header[h] }.compact.first.to_s.to_datetime
     end
 
     def headers_and_body_from_message(mail)
       target_part = mail
-      headers = mail.header.raw_source
+      headers = mail.header.raw_source.dup
 
       if mail.multipart?
         target_part = mail.text_part.presence || mail.parts.first
@@ -195,7 +199,7 @@ module DiscourseNntpBridge
 
     def category_for_newsgroup(newsgroup)
       CategoryCustomField.where(
-        name: "nntp_bridge_newsgroup",
+        name: 'nntp_bridge_newsgroup',
         value: newsgroup
       ).first.category
     end
@@ -213,7 +217,7 @@ module DiscourseNntpBridge
 
     def use_default_user!(article)
       notice = "#{SiteSetting.nntp_bridge_guest_notice.gsub('{author}', article.author_raw)}\n\n"
-      article.body.prepend(notice)
+      article.body = notice + article.body
       guest_username = SiteSetting.nntp_bridge_guest_username
       user = User.where(username: guest_username).first if guest_username.present?
       user || User.find(-1)
@@ -221,22 +225,22 @@ module DiscourseNntpBridge
 
     def find_or_create_topic_from_article(article, user_id, newsgroup)
       if article.is_dethreaded
-        article.body.prepend("#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n")
+        article.body = "#{SiteSetting.nntp_bridge_dethreaded_notice}\n\n" + article.body
       end
 
       return article.parent if article.parent
 
-      # todo: probably better to do this in a begin/rescue as this only happens to a select number of posts
+      # TODO: probably better to do this in a begin/rescue as this only happens to a select number of posts
 
       old_subject = article.subject
       subject = article.subject
 
-      if not TextSentinel.title_sentinel(subject).valid?
+      unless TextSentinel.title_sentinel(subject).valid?
         if SiteSetting.nntp_bridge_override_title_validations?
-          subject = "Temporary subject for complexity reasons"
-          # todo: this could error if the site doesn't allow duplicate titles
+          subject = 'Temporary subject for complexity reasons'
+          # TODO: this could error if the site doesn't allow duplicate titles
         else
-          puts "\nInvalid subject from message #{article.message_id}, skipping" if File.basename($0) == 'rake'
+          puts "\nInvalid subject from message #{article.message_id}, skipping" if File.basename($PROGRAM_NAME) == 'rake'
           raise ActiveRecord::Rollback
         end
       end
@@ -257,7 +261,7 @@ module DiscourseNntpBridge
       topic
     end
 
-    DATE_HEADERS = ['Injection-Date', 'NNTP-Posting-Date', 'Date']
+    DATE_HEADERS = ['Injection-Date', 'NNTP-Posting-Date', 'Date'].freeze
     Threading = Struct.new(:parent, :is_correct)
     Article = Struct.new(
       :message,
