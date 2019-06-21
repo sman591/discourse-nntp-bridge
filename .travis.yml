@@ -1,42 +1,12 @@
-sudo: required # required: https://github.com/discourse/mini_racer#travis-ci
-dist: trusty # required: https://github.com/discourse/mini_racer#travis-ci
-language: ruby
-cache:
-  directories:
-    - discourse/vendor/bundle
+# We want to use the KVM-based system, so require sudo
+sudo: required
 services:
-  - postgresql
-  - redis-server
-addons:
-  postgresql: 9.3
-  apt:
-    packages:
-    - gifsicle
-    - jpegoptim
-    - optipng
-    - jhead
-  code_climate:
-    repo_token: 34de2e1d1093068fa2e757bfce3a6214ae11c4b3f63bf36d81ec105c04ac2463
-services:
-  - redis-server
-env:
-  - LOAD_PLUGINS=1 RUN_COVERAGE=1 RAILS_ENV=test
+  - docker
+
 before_install:
-  - cd discourse
-  - git init
-  - git remote add -t \* -f origin https://github.com/discourse/discourse.git
-  - git checkout tags/latest-release
-  - mkdir plugins/discourse-nntp-bridge
-  - cd ..
-  - shopt -s extglob dotglob
-  - mv !(discourse) discourse/plugins/discourse-nntp-bridge/
-  - shopt -u dotglob
-  - cd discourse
-  - echo "gem 'simplecov'" >> Gemfile
-  - bundle install
+  - git clone --depth=1 https://github.com/discourse/discourse-plugin-ci
+
+install: true # Prevent travis doing bundle install
+
 script:
-  - bundle exec rake db:create db:migrate db:test:prepare
-  - bundle exec rake plugin:spec[discourse-nntp-bridge]
-after_script:
-  - gem install codeclimate-test-reporter
-  - codeclimate-test-reporter --path-prefix="plugins/discourse-nntp-bridge"
+  - discourse-plugin-ci/script.sh
