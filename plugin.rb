@@ -2,7 +2,7 @@
 
 # name: discourse-nntp-bridge
 # about: Discourse plugin to keep NNTP & Discourse in sync
-# version: 0.1.13
+# version: 0.1.14
 # authors: Stuart Olivera
 # url: https://github.com/sman591/discourse-nntp-bridge
 
